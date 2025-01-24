@@ -4,7 +4,6 @@ from pprint import pprint
 from mistralai import Mistral
 
 
-
 def extract_data() -> json:
     api_key = os.environ["MISTRAL_API_KEY"]
     model = "mistral-large-latest"
@@ -67,22 +66,31 @@ def extract_data() -> json:
         }
     ]
 
-    chat_response = client.chat.complete(
-        model=model,
-        messages=messages,
-        response_format={
-            "equation type":    "equation type",
-            "equation title":   "equation title",
-            "interval":         ["min", "max"],
-            "coefficients":     ["a", "b", "c", "d", "e"],
-            "exit":             False
-        }
-    )
+    while True:
+        try:
+            chat_response = client.chat.complete(
+                model=model,
+                messages=messages,
+                response_format={
+                    "equation type":    "equation type",
+                    "equation title":   "equation title",
+                    "interval":         ["min", "max"],
+                    "coefficients":     ["a", "b", "c", "d", "e"],
+                    "exit":             False
+                }
+            )
 
-    result = chat_response.choices[0].message.content
+            result = chat_response.choices[0].message.content
+            result = json.loads(result)
+
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+            
     print(result, type(result))
 
     return result
+
 
 
 
