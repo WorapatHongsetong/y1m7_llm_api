@@ -40,7 +40,48 @@ equation_type = {
     }
 """
 
-def generate_data_w_json(input_json: dict) -> np.array:
+def check_data_valid(input_json: dict) -> tuple[list, str]:
+
+    data = input_json
+
+    equation_type = data.get("equation type")
+    equation_title = data.get("equation title")
+    interval = data.get("interval")
+    coefficients = data.get("coefficients")
+    exit= data.get("exit")
+
+    error = [0, 0, 0, 0, 0]
+    error_message = ""
+
+    try:
+        str(equation_type)
+        if equation_type not in ("linear", "polynomial deg=2", "polynomial deg=3", "polynomial deg=4", "sine", "cosine"):
+            error[0] = 1
+    except:
+        error[0] = 1
+
+    try:
+        [float(c) for c in interval]
+    except:
+        error[2] = 1
+    
+    try:
+        [float(c) for c in coefficients]
+    except:
+        error[3] = 1
+    
+    if error[0] == 1:
+        error_message += "equation type error.\n"
+    if error[2] == 1:
+        error_message += "interval type error.\n"
+    if error[3] == 1:
+        error_message += "coefficients type error.\n"
+    
+    return error, error_message
+
+
+
+def generate_data_w_json(input_json: dict) -> tuple[np.array, str]:
 
     data = input_json
 
