@@ -6,30 +6,41 @@ import numpy as np
 
 def plot_by_text():
 
-    user_input = input("User_input: ")
+    run = True
+    while run:
+        print("\n\n\n\n\n\n\n\n\n")
 
-    iterations = 0
-    while True:
-        try:
-            data_json = llm.extract_data(user_prompt=user_input)
+        user_input = input("User_input: ")
 
-            err_check, err_msg = pdt.check_data_valid(data_json)
+        iterations = 0
+        while True:
+            try:
+                data_json = llm.extract_data(user_prompt=user_input)
 
-            if err_check != [0, 0, 0, 0, 0]:
-                raise err_msg
-            
-            data_array, graph_title = pdt.generate_data_w_json(data_json)
+                if data_json.get("exit") == True:
+                    print("\n\n\n\n\n\n\n\n\n\n")
+                    print("Goodbye... :D")
+                    run = False
+                    break
 
-            vis.plot_data(data_array, graph_title)
 
-            break
-        except Exception as e:
-            iterations += 1
-            print(f"Error: {e}")
+                err_check, err_msg = pdt.check_data_valid(data_json)
 
-            if iterations > 4:
-                print(f"User inputs may missing essential prompt...\nPlease relaunch program.")
+                if err_check != [0, 0, 0, 0, 0]:
+                    raise err_msg
+                
+                data_array, graph_title = pdt.generate_data_w_json(data_json)
+
+                vis.plot_data(data_array, graph_title)
+
                 break
+            except Exception as e:
+                iterations += 1
+                print(f"Error: {e}")
+
+                if iterations > 4:
+                    print(f"User inputs may missing essential prompt...\nPlease relaunch program.")
+                    break
 
     
 if __name__ == "__main__":
