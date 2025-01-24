@@ -1,5 +1,4 @@
 import numpy as np
-import llm_response as llm
 
 """
 response_format={
