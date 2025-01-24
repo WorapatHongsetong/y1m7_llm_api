@@ -4,7 +4,7 @@ from pprint import pprint
 from mistralai import Mistral
 
 
-def extract_data() -> json:
+def extract_data(user_prompt) -> json:
     api_key = os.environ["MISTRAL_API_KEY"]
     model = "mistral-large-latest"
 
@@ -55,7 +55,7 @@ def extract_data() -> json:
     "VERY IMPORTANT, response should be collapsed json format, ONLY json format, don't bring anything else...\n" +\
     "Example: {\'equation type\': \'linear\', \'equation title\': \'3x + 5\', \'interval\': [6,100], \'coefficients\': [3, 5, 0, 0, 0],\'exit\': false}"
 
-    user_input = input("User Input: ")
+    user_input = user_prompt
 
     message_content = f"Data:\n{data_json_str}\n\nExample Response:\n{ans_json_str}\n\nPrompt:\n{prompt}\n\nUser Input:\n{user_input}"
 
@@ -86,13 +86,12 @@ def extract_data() -> json:
             break
         except Exception as e:
             print(f"Error: {e}")
-            
+
     print(result, type(result))
 
     return result
 
 
 
-
 if __name__ == "__main__":
-    extract_data()
+    extract_data(input("user_input: "))
