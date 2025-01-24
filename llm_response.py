@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from pprint import pprint
 from mistralai import Mistral
 
@@ -86,6 +87,7 @@ def extract_data(user_prompt) -> json:
             break
         except Exception as e:
             print(f"Error: {e}")
+            time.sleep(1)
 
     print(result, type(result))
 
